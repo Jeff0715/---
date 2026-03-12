@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2026凱基人壽未來保險創投家 - 森靈谷創業特質測驗</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; color: #334155; overflow-x: hidden; }
+        .page { display: none; min-height: 100vh; padding: 16px; flex-direction: column; align-items: center; justify-content: center; }
+        .page.active { display: flex !important; animation: fadeIn 0.4s ease-both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 選項按鈕樣式 */
+        .option-btn { width: 100%; padding: 16px 20px; margin: 6px 0; background: white; border-radius: 16px; transition: all 0.2s; text-align: left; cursor: pointer; border: 2px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); font-weight: 500; font-size: 1rem; line-height: 1.6; color: #475569; position: relative; overflow: hidden; }
+        @media (min-width: 640px) { .option-btn { padding: 18px 24px; font-size: 1.05rem; } }
+        .option-btn:hover { border-color: #34d399; background: #ecfdf5; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1); }
+        .option-btn.selected { border-color: #10b981; background: #d1fae5; color: #065f46; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); transform: scale(1.02); font-weight: 700; }
+        
+        /* 高質感森靈谷背景 */
+        .bg-gradient-forest { 
+            background-color: #f0fdf4;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(253, 224, 71, 0.06) 0%, transparent 60%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 20c15-15 35-5 40 10s-5 35-20 40-35 5-40-10 5-35 20-40z' fill='%2310b981' fill-opacity='0.05'/%3E%3Cpath d='M80 60c10-10 25-5 30 10s-5 25-15 30-25 5-30-10 5-25 15-30z' fill='%23059669' fill-opacity='0.04'/%3E%3Cpath d='M10 80c8-8 20-4 24 8s-4 20-12 24-20 4-24-8 4-20 12-24z' fill='%2334d399' fill-opacity='0.04'/%3E%3Ccircle cx='85' cy='25' r='2' fill='%23fbbf24' fill-opacity='0.3'/%3E%3Ccircle cx='25' cy='85' r='2' fill='%23fbbf24' fill-opacity='0.3'/%3E%3Ccircle cx='50' cy='10' r='1.5' fill='%236ee7b7' fill-opacity='0.4'/%3E%3C/svg%3E");
+            background-attachment: fixed;
+        }
+
+        /* --- 怪獸動畫特效 --- */
+        @keyframes livelyBounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(-12px) scale(1.02, 0.98); }
+            60% { transform: translateY(-12px) scale(0.98, 1.02); }
+            80% { transform: translateY(4px) scale(1.01, 0.99); }
+        }
+        @keyframes tadaHappy {
+            0% { transform: scale(1); }
+            10%, 20% { transform: scale(0.95) rotate(-4deg); }
+            30%, 50%, 70%, 90% { transform: scale(1.05) rotate(4deg); }
+            40%, 60%, 80% { transform: scale(1.05) rotate(-4deg); }
+            100% { transform: scale(1); }
+        }
+
+        .monster-wrapper { position: relative; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; animation: livelyBounce 2.5s ease-in-out infinite; margin: 0 auto; }
+        .result-monster-active { animation: tadaHappy 2.5s ease-in-out infinite; transform-origin: center bottom; }
+
+        /* --- 怪獸 CSS 核心 (V5 精修版) --- */
+        /* 🟠 橘寶 (Spark) */
+        .m-orange { width: 90px; height: 90px; background: radial-gradient(circle at 30% 30%, #ff8c00, #e65100); border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 10px 20px rgba(230, 81, 0, 0.4); position: relative; overflow: hidden; }
+        .m-orange::after { content: ''; position: absolute; top: 18px; left: 8px; width: 65px; height: 22px; background: #333; border-radius: 12px; transform: rotate(45deg); border: 2px solid #555; z-index: 2; }
+        .mo-eyes { position: absolute; top: 32px; left: 32px; display: flex; gap: 6px; transform: rotate(45deg); z-index: 1; }
+        .mo-eye { width: 12px; height: 12px; background: #ffffff; border-radius: 50%; box-shadow: 0 0 5px rgba(255,255,255,0.6); }
+        .mo-mole { position: absolute; bottom: 20px; right: 20px; width: 4px; height: 4px; background: #331a00; border-radius: 50%; z-index: 3; opacity: 0.8; }
+
+        /* 🔵 布魯 (Logic) */
+        .m-blue { width: 90px; height: 90px; background: linear-gradient(135deg, #1e5bbd 0%, #06377B 100%); border-radius: 18px; box-shadow: 0 0 25px rgba(6, 55, 123, 0.4); position: relative; overflow: hidden; }
+        .m-blue::after { content: ''; position: absolute; top: 32px; left: 12px; width: 60px; height: 20px; background: #000000; border: 2px solid #3b82f6; border-radius: 6px; z-index: 2; }
+        .mb-eyes { position: absolute; top: 36px; left: 22px; display: flex; gap: 18px; z-index: 3; }
+        .mb-eye { width: 8px; height: 8px; background: #ffffff; border-radius: 50%; box-shadow: 0 0 4px rgba(255,255,255,0.8); }
+        .mb-pattern { position: absolute; bottom: -10px; right: -10px; width: 45px; height: 45px; background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(6, 55, 123, 0.5)); transform: rotate(15deg); border-radius: 6px; }
+
+        /* 🟢 綠豆 (Eco) */
+        .m-green { width: 80px; height: 100px; background: linear-gradient(to right, #56ab2f, #a8e063); border-radius: 40% 40% 40% 40% / 60% 60% 30% 30%; box-shadow: 0 0 25px rgba(86, 171, 47, 0.5); position: relative; }
+        .mg-soil { position: absolute; top: 0px; left: 30px; width: 18px; height: 5px; background: #2e5c1b; border-radius: 50%; opacity: 0.6; }
+        .mg-stem { position: absolute; top: -12px; left: 37px; width: 4px; height: 18px; background: #8BC34A; border-radius: 4px; }
+        .mg-leaf-l { position: absolute; top: -16px; left: 28px; width: 10px; height: 10px; background: #8BC34A; border-radius: 100% 0 100% 0; transform: rotate(-10deg); }
+        .mg-leaf-r { position: absolute; top: -20px; left: 39px; width: 12px; height: 12px; background: #76b041; border-radius: 0 100% 0 100%; transform: rotate(-20deg); }
+        .mg-eyes { position: absolute; top: 32px; left: 25px; display: flex; gap: 12px; }
+        .mg-eye { width: 9px; height: 9px; background: linear-gradient(to bottom, #ffffff, #e2e8f0); border-radius: 50%; }
+
+        /* ⚪️ 小白 (Uni) */
+        .m-white { width: 110px; height: 80px; background: radial-gradient(circle at 30% 30%, #ffffff, #f1f5f9); border: none; border-radius: 50% 50% 40% 40% / 60% 60% 35% 35%; box-shadow: 0 0 25px rgba(200, 200, 220, 0.8), inset 0 -5px 15px rgba(0,0,0,0.05); position: relative; }
+        .m-white-face { position: absolute; top: 30px; left: 45px; display: flex; gap: 14px; transform: rotate(5deg); }
+        .mw-eye { width: 9px; height: 9px; background: linear-gradient(to bottom, #94a3b8, #475569); border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+        .radar-container { width: 100%; max-width: 360px; aspect-ratio: 1; position: relative; margin: 0 auto; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* RWD 輔助 */
+        .monster-scale-mobile { transform: scale(0.6); margin: -20px; }
+        @media (min-width: 640px) { .monster-scale-mobile { transform: scale(0.9); margin: 0; } }
+
+        /* 無陰影迷你版(用於頭像) */
+        .no-shadow { box-shadow: none !important; }
+    </style>
+</head>
+<body class="bg-gradient-forest">
+
+    <!-- 首頁 -->
+    <div id="page-0" class="page active px-4 sm:px-6">
+        
+        <!-- 四隻 CSS IP 排排站 -->
+        <div class="flex gap-0 sm:gap-4 justify-center mb-4 sm:mb-6 flex-wrap sm:flex-nowrap overflow-hidden">
+            <div class="monster-wrapper monster-scale-home" style="animation-delay: 0s;"><div class="m-orange"><div class="mo-eyes"><div class="mo-eye"></div><div class="mo-eye"></div></div><div class="mo-mole"></div></div></div>
+            <div class="monster-wrapper monster-scale-home" style="animation-delay: 0.4s;"><div class="m-blue"><div class="mb-pattern"></div><div class="mb-eyes"><div class="mb-eye"></div><div class="mb-eye"></div></div></div></div>
+            <div class="monster-wrapper monster-scale-home" style="animation-delay: 0.8s;"><div class="m-green"><div class="mg-soil"></div><div class="mg-stem"></div><div class="mg-leaf-l"></div><div class="mg-leaf-r"></div><div class="mg-eyes"><div class="mg-eye"></div><div class="mg-eye"></div></div></div></div>
+            <div class="monster-wrapper monster-scale-home" style="animation-delay: 1.2s;"><div class="m-white"><div class="m-white-face"><div class="mw-eye"></div><div class="mw-eye"></div></div></div></div>
+        </div>
+        
+        <h2 class="text-lg sm:text-2xl font-bold text-slate-500 mb-2 text-center tracking-widest uppercase mt-2">2026 凱基人壽 未來保險創投家</h2>
+        <h1 class="text-3xl sm:text-5xl font-black text-emerald-800 mb-6 sm:mb-8 text-center tracking-tight leading-tight">🌳 森靈谷創業傳說</h1>
+        
+        <div class="w-full max-w-2xl text-slate-600 mb-6 sm:mb-8 leading-relaxed bg-white/85 backdrop-blur-md p-5 sm:p-8 rounded-[24px] sm:rounded-3xl shadow-lg text-left border-t-4 border-emerald-500 relative overflow-hidden">
+            <div class="absolute top-0 right-0 opacity-5 text-6xl sm:text-8xl transform translate-x-4 -translate-y-4"><i class="fas fa-leaf"></i></div>
+            
+            <h3 class="text-lg sm:text-xl font-black mb-3 text-emerald-800 flex items-center gap-2"><i class="fas fa-compass"></i> 尋找你的神隊友！</h3>
+            <p class="mb-4 text-sm sm:text-base">在「未來保險創投家」的創新競賽中，一個完美的團隊需要各種不同天賦的火花碰撞！我們將職場情境化為這場「森靈谷」的奇幻冒險，幫你找出最契合的創業定位。</p>
+            
+            <div class="bg-emerald-50/80 p-4 sm:p-5 rounded-xl border border-emerald-100 mb-4">
+                <p class="font-bold text-emerald-800 mb-2 text-sm sm:text-base">📖 傳說的開端...</p>
+                <p class="text-sm sm:text-base text-justify">古老的「創源之樹」甦醒，它對所有渴望改變命運的小精靈訴說：「永恆森林將迎來新時代，誰能創造新的秩序，誰就能重塑大地。」<br>你決定帶領小隊前往未知的邊境開拓。面對各種危機與抉擇，你的本能會引領你走向哪一種領袖之路？</p>
+            </div>
+            
+            <p class="font-bold text-emerald-700 text-center text-sm sm:text-base">準備好發掘你的專屬創業屬性了嗎？</p>
+        </div>
+
+        <button onclick="goToPage(1)" class="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 sm:px-16 py-4 rounded-full text-lg sm:text-xl font-black shadow-xl hover:shadow-2xl hover:from-emerald-400 hover:to-teal-500 transition-all transform hover:-translate-y-1 mb-4 sm:mb-6 border-2 border-white/20">
+            開始探險 <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+
+        <p class="text-[11px] sm:text-xs text-slate-400 text-center max-w-lg mt-2 px-4 py-2 bg-white/60 rounded-lg backdrop-blur-sm">
+            ※ 溫馨小提醒：本測驗結果由數據與心理學模型綜合演算，旨在發掘潛在特質與促進交流，測驗結果僅供參考，請依照直覺放輕鬆作答！
+        </p>
+    </div>
+
+    <!-- 測驗題目區塊 -->
+    <div id="quiz-flow" class="w-full flex flex-col items-center"></div>
+
+    <!-- 結果頁 -->
+    <div id="page-result" class="page w-full p-2 sm:p-6">
+        <div id="result-capture-area" class="bg-white/95 backdrop-blur-md w-full max-w-[1200px] rounded-[30px] sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-emerald-50 relative mx-auto">
+            
+            <!-- 左側區域 (IP & 雷達圖) -->
+            <div id="result-theme-bg" class="w-full lg:w-5/12 p-6 sm:p-10 flex flex-col items-center justify-center text-center relative z-10">
+                
+                <div id="result-monster-icon" class="scale-[1.1] sm:scale-[1.3] mb-8 sm:mb-12 mt-4 drop-shadow-lg h-[100px] sm:h-[120px] flex items-center justify-center"></div>
+                
+                <div id="result-role" class="font-['Oswald'] tracking-[4px] uppercase opacity-80 text-xs sm:text-sm mb-2 font-black bg-white/40 px-4 py-1.5 rounded-full backdrop-blur-sm shadow-sm">角色稱號</div>
+                <h1 id="result-name" class="text-3xl sm:text-4xl font-black mb-4 drop-shadow-sm">IP本名</h1>
+                <div id="result-tags" class="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8 w-full max-w-[280px]"></div>
+                
+                <!-- 五象限雷達圖 -->
+                <div class="radar-container bg-white/80 rounded-[2rem] p-3 sm:p-4 shadow-inner backdrop-blur-md">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 右側區域：深度特質與大老原型 -->
+            <div class="w-full lg:w-7/12 p-6 sm:p-12 bg-slate-50/50 flex flex-col justify-start overflow-y-auto z-10 relative">
+                
+                <!-- 深度特質 -->
+                <div class="mb-8">
+                    <h3 class="text-xl sm:text-2xl font-black border-l-4 pl-3 sm:pl-4 mb-4 text-slate-800 flex items-center gap-2 sm:gap-3" id="trait-title">
+                        <i class="fas fa-fingerprint opacity-70"></i> 深度特質解析
+                    </h3>
+                    <div class="text-slate-600 leading-relaxed text-justify text-sm sm:text-base space-y-3">
+                        <p id="result-traits-p1"></p>
+                        <p id="result-traits-p2" class="font-medium bg-white p-4 rounded-xl shadow-sm border border-slate-100"></p>
+                    </div>
+                </div>
+
+                <!-- 🌟 世界級大老原型 -->
+                <div class="mb-8">
+                    <h3 class="text-xl sm:text-2xl font-black border-l-4 pl-3 sm:pl-4 mb-4 text-slate-800 flex items-center gap-2 sm:gap-3" id="celeb-title">
+                        <i class="fas fa-star opacity-70 text-yellow-400"></i> 世界級大老原型
+                    </h3>
+                    <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-100 flex items-start sm:items-center gap-4 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 opacity-5 text-7xl"><i class="fas fa-crown"></i></div>
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-inner" id="celeb-icon-bg">
+                            <i class="fas fa-user-tie text-white"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <h4 class="font-black text-lg sm:text-xl mb-1" id="result-celeb-name">名人名稱</h4>
+                            <p class="text-slate-600 text-sm sm:text-base leading-relaxed" id="result-celeb-desc">名人描述</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 史詩故事後續 -->
+                <div class="mb-8">
+                    <h3 class="text-xl sm:text-2xl font-black border-l-4 pl-3 sm:pl-4 mb-4 text-slate-800 flex items-center gap-2 sm:gap-3" id="story-title">
+                        <i class="fas fa-scroll opacity-70"></i> 📖 史詩結局傳說
+                    </h3>
+                    <div class="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-100 relative">
+                        <i class="fas fa-quote-left absolute top-3 left-3 sm:top-4 sm:left-4 text-slate-100 text-3xl sm:text-4xl z-0"></i>
+                        <p id="result-story" class="text-slate-600 leading-relaxed text-justify text-sm sm:text-base relative z-10 pl-5 sm:pl-6"></p>
+                    </div>
+                </div>
+                
+                <!-- 合作指南 -->
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-black border-l-4 border-slate-400 pl-3 sm:pl-4 mb-4 text-slate-800 flex items-center gap-2 sm:gap-3">
+                        <i class="fas fa-users opacity-70"></i> 🤝 跨特質合作指南
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-500 mb-3">在「未來保險創投家」競賽中，建議尋找以下夥伴互補：</p>
+                    <div id="result-collab" class="space-y-3 sm:space-y-4"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 pb-8 sm:pb-12 w-full justify-center px-2">
+            <button onclick="downloadResult()" class="bg-emerald-600 text-white px-6 sm:px-8 py-4 rounded-full font-bold shadow-xl hover:bg-emerald-700 transition flex items-center justify-center gap-2 w-full sm:w-auto text-base sm:text-lg">
+                <i class="fas fa-download"></i> 下載專屬分析報告
+            </button>
+            <button onclick="location.reload()" class="bg-white text-slate-500 px-6 sm:px-8 py-4 rounded-full font-bold border-2 border-slate-200 hover:bg-slate-50 transition flex items-center justify-center gap-2 w-full sm:w-auto text-base sm:text-lg">
+                <i class="fas fa-redo-alt"></i> 重新測驗
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- 劇情題庫 ---
+        const questions = [
+            { q: "古老的「創源之樹」發出低語，徵召精靈開拓新荒野。你決定站出來報名的瞬間，腦中浮現的願景是？", a: "這是擴張勢力的大好機會，我已看準一塊風水寶地，準備建立最強大的堡壘。", b: "我想親手打造一個運作完美、自給自足，大家都能安居樂業的永續聚落。", c: "森林各族分離太久了，我想建立一個沒有邊界、讓所有族群共相盛舉的聯盟。", d: "待在舒適圈太無聊了！我要去沒人敢去的地方，實驗沒人做過的瘋狂點子！" },
+            { q: "踏上旅程後，一陣迷霧將小隊困在一片長滿發光奇異植物的未知樹海中。你的第一反應是？", a: "拿出羅盤與水晶球，冷靜分析植物分佈與地形，精算出最安全的脫困路線。", b: "建立臨時營地，先摸索這些植物的特性，確認是否有毒或能作為資源利用。", c: "安撫焦躁的隊員，並嘗試用微弱的魔法頻率，看看能不能聯絡上當地的原生精靈。", d: "太酷了吧！這植物會發光耶！直接採一株來試試看能不能當作新的魔法能源！" },
+            { q: "抵達荒野後百廢待舉。神秘商人帶來了一張「英雄招募卷」，你決定優先招募哪種夥伴？", a: "招募自帶明確技能、能迅速填補團隊戰力缺口的高效能菁英。", b: "招募不怕吃苦、願意捲起袖子從零開始搬磚、腳踏實地的實作型夥伴。", c: "招募人脈廣闊、自帶其他族群好感度，能幫聚落帶來更多外交機會的外向精靈。", d: "招募思考跳躍、不按牌理出牌，就算有點叛逆但也絕對不怕冒險的怪才。" },
+            { q: "凜冬將至，聚落的「魔法能量石」卻嚴重短缺，只剩下最後一小箱。身為領袖的你決定：", a: "啟動最高級別的控管機制，計算投資報酬率，只將能量石配給給能產出最大價值的核心設施。", b: "重新盤點所有消耗，建立更嚴謹的節能 SOP，一邊勒緊褲帶一邊想辦法熬過冬天。", c: "帶著能量石去拜訪隔壁的矮人部落，試著用我們的技術跟他們交換更多過冬物資。", d: "把剩下的能量石全部投入那個還在測試中的「新型聚能魔法陣」，賭一把大的！" },
+            { q: "斥候回報，河對岸竟然有一群小矮人也在建立類似的聚落，而且進度緊追在後！", a: "派出間諜摸清他們的弱點，立刻調整發展重點，在關鍵領域形成絕對的護城河。", b: "不受干擾，專注於我們自己的建設進度，只要基礎打得比他們穩，時間會證明一切。", c: "準備一份厚禮過河拜訪，看看雙方有沒有什麼資源可以互補，或許能結盟一起做大。", d: "直接砍掉原本的設計圖！我要蓋一個規格完全輾壓他們、讓他們看傻眼的前衛大工程！" },
+            { q: "午夜時分，一場突如其來的暴風雨摧毀了聚落剛蓋好的防禦塔，士氣低迷。你會：", a: "立刻召開緊急會議，停損並重新分配剩餘資源，制定出最理性的災後重建計畫。", b: "什麼都不說，第一個拿起工具衝進廢墟，帶領大家連夜動工修復，用行動穩定軍心。", c: "召集所有人圍著營火，發表一場激勵人心的演說，重新凝聚大家最初一起出來闖蕩的初衷。", d: "毀得好！防禦塔本來就有設計瑕疵，趁這個機會，我們來蓋一個會反彈魔法的超級碉堡！" },
+            { q: "聚落的名聲傳開，大量的流浪精靈湧入，原本的空間已經容納不下。面對擴張的壓力，你傾向：", a: "制定嚴格的入村審查，篩選有價值的精靈，並規劃階段性的擴張路線以控制風險。", b: "先暫停招募，把村莊內部的下水道、農田等基礎設施全面升級後，再穩健地容納新居民。", c: "舉辦一場盛大的迎新慶典，鼓勵新舊精靈打成一片，並讓新來的精靈也參與村莊的擴張決策。", d: "空間不夠？那我們就往地底挖、或是往天上蓋！我要設計出全森林第一座立體化聚落！" },
+            { q: "終於迎來了百年繁榮。創源之樹的化身降臨，問你：「帶領聚落走向偉大，最關鍵的靈魂是什麼？」", a: "「是看透迷霧的雙眼。能洞悉時局、精準佈局，搶佔無可取代的先機。」", b: "「是永不懈怠的雙手。唯有務實穩健、將細節做到極致，才能打造經得起考驗的基業。」", c: "「是包容萬物的胸懷。懂得創造連結、化敵為友，因為聯盟的力量無窮。」", d: "「是無所畏懼的心。敢於打破舊有框架，大膽實驗那些能顛覆時代的新事物！」" }
+        ];
+
+        // IP 原始結構
+        const mBlue = '<div class="m-blue"><div class="mb-pattern"></div><div class="mb-eyes"><div class="mb-eye"></div><div class="mb-eye"></div></div></div>';
+        const mGreen = '<div class="m-green"><div class="mg-soil"></div><div class="mg-stem"></div><div class="mg-leaf-l"></div><div class="mg-leaf-r"></div><div class="mg-eyes"><div class="mg-eye"></div><div class="mg-eye"></div></div></div>';
+        const mWhite = '<div class="m-white"><div class="m-white-face"><div class="mw-eye"></div><div class="mw-eye"></div></div></div>';
+        const mOrange = '<div class="m-orange"><div class="mo-eyes"><div class="mo-eye"></div><div class="mo-eye"></div></div><div class="mo-mole"></div></div>';
+
+        // 供結果頁合作指南使用的迷你圓角頭像版
+        const miniAvatars = {
+            'A': `<div class="flex-shrink-0 bg-blue-50 rounded-full border-2 border-blue-200 shadow-sm flex items-center justify-center overflow-hidden" style="width: 48px; height: 48px;"><div style="transform: scale(0.38); display: flex; justify-content: center; align-items: center;"><div class="m-blue no-shadow"><div class="mb-pattern"></div><div class="mb-eyes"><div class="mb-eye"></div><div class="mb-eye"></div></div></div></div></div>`,
+            'B': `<div class="flex-shrink-0 bg-green-50 rounded-full border-2 border-green-200 shadow-sm flex items-center justify-center overflow-hidden" style="width: 48px; height: 48px;"><div style="transform: scale(0.38); margin-top: 12px; display: flex; justify-content: center; align-items: center;"><div class="m-green no-shadow"><div class="mg-soil"></div><div class="mg-stem"></div><div class="mg-leaf-l"></div><div class="mg-leaf-r"></div><div class="mg-eyes"><div class="mg-eye"></div><div class="mg-eye"></div></div></div></div></div>`,
+            'C': `<div class="flex-shrink-0 bg-slate-100 rounded-full border-2 border-slate-300 shadow-sm flex items-center justify-center overflow-hidden" style="width: 48px; height: 48px;"><div style="transform: scale(0.38); display: flex; justify-content: center; align-items: center;"><div class="m-white no-shadow"><div class="m-white-face"><div class="mw-eye"></div><div class="mw-eye"></div></div></div></div></div>`,
+            'D': `<div class="flex-shrink-0 bg-orange-50 rounded-full border-2 border-orange-200 shadow-sm flex items-center justify-center overflow-hidden" style="width: 48px; height: 48px;"><div style="transform: scale(0.38); display: flex; justify-content: center; align-items: center;"><div class="m-orange no-shadow"><div class="mo-eyes"><div class="mo-eye"></div><div class="mo-eye"></div></div><div class="mo-mole"></div></div></div></div>`
+        };
+
+        let currentAnswers = new Array(questions.length).fill(null);
+        let record = [];
+        let radarChartInstance = null;
+
+        function initQuiz() {
+            const flow = document.getElementById('quiz-flow');
+            questions.forEach((item, i) => {
+                const pageNum = i + 1;
+                const page = document.createElement('div');
+                page.id = `page-${pageNum}`;
+                page.className = 'page w-full px-2 sm:px-6';
+                
+                const headerMonsters = `
+                    <div class="flex justify-center items-center gap-0 sm:gap-4 -mt-4 sm:-mt-2 mb-2 sm:mb-4 transform scale-[0.55] sm:scale-75 origin-bottom">
+                        <div class="monster-wrapper" style="animation-delay: 0s;">${mOrange}</div>
+                        <div class="monster-wrapper" style="animation-delay: 0.4s;">${mBlue}</div>
+                        <div class="monster-wrapper" style="animation-delay: 0.8s;">${mGreen}</div>
+                        <div class="monster-wrapper" style="animation-delay: 1.2s;">${mWhite}</div>
+                    </div>
+                `;
+
+                page.innerHTML = `
+                    <div class="bg-white/95 backdrop-blur-sm p-5 sm:p-10 rounded-3xl shadow-xl border border-emerald-50 w-full max-w-2xl relative">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-slate-100 rounded-t-3xl overflow-hidden">
+                            <div class="h-full bg-emerald-400" style="width: ${(pageNum / questions.length) * 100}%"></div>
+                        </div>
+                        
+                        <div class="flex flex-col items-center mb-4 sm:mb-6 mt-0">
+                            ${headerMonsters}
+                            <div class="text-emerald-500 font-black text-xs sm:text-sm tracking-widest bg-emerald-50 px-4 py-1.5 rounded-lg border border-emerald-100 shadow-sm -mt-2">QUESTION 0${pageNum} / 08</div>
+                        </div>
+                        
+                        <h2 class="text-lg sm:text-2xl font-black text-slate-800 mb-6 sm:mb-8 leading-relaxed text-center px-2">${item.q}</h2>
+                        
+                        <div class="w-full flex flex-col items-center mb-6 gap-2 sm:gap-3" id="options-${i}">
+                            <button onclick="selectOption(${i}, 'A')" class="option-btn" data-val="A"><span class="mr-2 sm:mr-3 font-bold text-slate-400">A.</span>${item.a}</button>
+                            <button onclick="selectOption(${i}, 'B')" class="option-btn" data-val="B"><span class="mr-2 sm:mr-3 font-bold text-slate-400">B.</span>${item.b}</button>
+                            <button onclick="selectOption(${i}, 'C')" class="option-btn" data-val="C"><span class="mr-2 sm:mr-3 font-bold text-slate-400">C.</span>${item.c}</button>
+                            <button onclick="selectOption(${i}, 'D')" class="option-btn" data-val="D"><span class="mr-2 sm:mr-3 font-bold text-slate-400">D.</span>${item.d}</button>
+                        </div>
+
+                        <div class="flex gap-2 sm:gap-4 w-full justify-between mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-slate-100">
+                            <button onclick="goToPage(${pageNum - 1})" class="px-4 sm:px-5 py-3 rounded-full font-bold text-slate-500 hover:bg-slate-100 transition flex items-center justify-center text-sm sm:text-base flex-1 sm:flex-none">
+                                <i class="fas ${pageNum === 1 ? 'fa-home' : 'fa-arrow-left'} mr-2"></i>${pageNum === 1 ? '回首頁' : '上一題'}
+                            </button>
+                            
+                            <button onclick="goToPage(${pageNum + 1})" id="next-btn-${i}" class="px-6 sm:px-8 py-3 rounded-full font-black text-white bg-slate-300 cursor-not-allowed transition-all flex items-center justify-center text-sm sm:text-base flex-1 sm:flex-none" disabled>
+                                ${pageNum === questions.length ? '看報告 <i class="fas fa-magic ml-2"></i>' : '下一題 <i class="fas fa-arrow-right ml-2"></i>'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                flow.appendChild(page);
+            });
+        }
+
+        window.onload = initQuiz;
+
+        function selectOption(qIndex, value) {
+            currentAnswers[qIndex] = value;
+            record[qIndex] = value;
+            
+            const options = document.querySelectorAll(`#options-${qIndex} .option-btn`);
+            options.forEach(btn => btn.classList.remove('selected'));
+            document.querySelector(`#options-${qIndex} .option-btn[data-val="${value}"]`).classList.add('selected');
+
+            const nextBtn = document.getElementById(`next-btn-${qIndex}`);
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('bg-slate-300', 'cursor-not-allowed');
+            nextBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-700', 'shadow-lg', 'transform', 'hover:-translate-y-0.5');
+        }
+
+        function goToPage(idx) {
+            const allPages = document.querySelectorAll('.page');
+            
+            if (idx === 0) {
+                allPages.forEach(p => p.classList.remove('active'));
+                document.getElementById('page-0').classList.add('active');
+                window.scrollTo(0, 0);
+            } else if (idx > questions.length) {
+                if(currentAnswers.includes(null)) {
+                    alert("還有題目沒有回答完喔！");
+                    return;
+                }
+                allPages.forEach(p => p.classList.remove('active'));
+                calculateResult();
+                document.getElementById('page-result').classList.add('active');
+                window.scrollTo(0, 0);
+            } else {
+                allPages.forEach(p => p.classList.remove('active'));
+                document.getElementById(`page-${idx}`).classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function calculateResult() {
+            let scores = { A: 0, B: 0, C: 0, D: 0 };
+            let dim = { innov: 5, proac: 5, risk: 5, auto: 5, comp: 5 };
+
+            currentAnswers.forEach(ans => {
+                scores[ans]++;
+                if(ans === 'A') { dim.comp += 1; dim.risk -= 0.5; dim.auto -= 0.5; dim.proac += 0.5; }
+                if(ans === 'B') { dim.auto += 1.5; dim.innov -= 0.5; dim.comp += 0.5; }
+                if(ans === 'C') { dim.proac += 1; dim.comp -= 0.5; dim.risk -= 0.5; dim.innov += 0.5; }
+                if(ans === 'D') { dim.innov += 1.5; dim.risk += 1; dim.auto -= 0.5; }
+            });
+
+            for(let key in dim) {
+                dim[key] = Math.round(Math.min(Math.max(dim[key], 5), 10)); // 保底 5 分
+            }
+
+            const sortedKeys = Object.keys(scores).sort((a, b) => {
+                if(scores[b] !== scores[a]) return scores[b] - scores[a];
+                const checkIndices = [0, 7, 1];
+                for(let idx of checkIndices) {
+                    if(record[idx] === a) return -1;
+                    if(record[idx] === b) return 1;
+                }
+                return 0;
+            });
+            const resK = sortedKeys[0];
+
+            renderResult(resK, dim);
+        }
+
+        function renderResult(type, dim) {
+            const dataMap = {
+                'D': { 
+                    roleName: "🚀 行動派勇士", ipName: "橘寶 Spark", color: "#ea580c", bg: "#fff7ed", 
+                    monster: '<div class="m-orange"><div class="mo-eyes"><div class="mo-eye"></div><div class="mo-eye"></div></div><div class="mo-mole"></div></div>',
+                    traitsP1: "你不受既有框架拘束，腦中隨時運轉著顛覆常規的瘋狂點子。對你而言，「沒人做過」不是阻力，而是最強烈的動機。你具備極高的風險容忍度與前瞻性，總是能洞察到別人尚未發掘的藍海機會。",
+                    traitsP2: "💡 職場超能力：你擁有極強的個人魅力與說服力，在團隊陷入僵局或面臨轉型時，你是最能打破慣性思維、帶領大家勇敢衝鋒陷陣的靈魂人物。",
+                    celebName: "伊隆·馬斯克 (Elon Musk)",
+                    celebDesc: "從不按牌理出牌的狂人！與你一樣，他不畏懼失敗，總是用最前衛的點子顛覆並重新定義整個產業的遊戲規則。",
+                    story: "當其他精靈還在爭論如何更有效率地採集果實時，你已經用魔法讓種子在空中生長，直接創造了一座令人驚嘆的「浮空之城」。你無視了森林千年的古老規則，大膽實驗前所未見的生存模式。<br><br>你的創舉一開始引來無數質疑，但當浮空之城展現出無可匹敵的魔力時，連古老的「創源之樹」都為你降下金色的光芒，承認你開創了一個科技與魔法完美融合的全新紀元。你不再只是個領袖，你成為了改寫森靈谷歷史的傳奇開創者！",
+                    tags: ["#顛覆現狀", "#大膽實驗", "#靈魂人物"],
+                    collab: [
+                        { icon: 'A', t: "與「策略派軍師(布魯)」合作", c: "讓軍師幫你的瘋狂點子穿上「防彈衣」。你提供無限的方向，讓他負責幫你精算風險，掃平現實路上的障礙。" },
+                        { icon: 'B', t: "與「營運智囊(綠豆)」合作", c: "這是你最不可或缺的拍檔。你需要推手幫你把點子「降落」在地面，用無可挑剔的執行力確保夢想不會崩塌。" }
+                    ]
+                },
+                'A': { 
+                    roleName: "⚔️ 策略派軍師", ipName: "布魯 Logic", color: "#1e40af", bg: "#eff6ff", 
+                    monster: '<div class="m-blue"><div class="mb-pattern"></div><div class="mb-eyes"><div class="mb-eye"></div><div class="mb-eye"></div></div></div>',
+                    traitsP1: "你是天生的棋手，腦中有一張精密的雷達圖。面對複雜的問題，你總能冷靜分析數據、評估成本效益，並制定出勝率最高的作戰計畫。你重視邏輯與實證，絕不輕易打沒有準備的仗。",
+                    traitsP2: "💡 職場超能力：你具備強大的全局觀與風險控管能力。在資源有限的專案中，你是能確保預算用在刀口上、引導團隊避開地雷並穩健獲利的最強大腦。",
+                    celebName: "華倫·巴菲特 (Warren Buffett)",
+                    celebDesc: "投資與保險界的神級大老！他絕不盲目跟風，永遠憑藉最嚴謹的數據分析與風險精算，精準佈局具備絕對護城河的商業帝國。",
+                    story: "你站在森靈谷的最高峰，手中的羊皮地圖標註了森林每一寸資源的脈絡。你建立的聚落不是隨機搭建的村莊，而是一座經過精密計算、堅不可摧的輝煌堡壘，總能搶先占據最肥沃的水源地。<br><br>當一場百年罕見的魔法風暴席捲森林，其他盲目擴張的部落紛紛瓦解時，唯有你的堡壘因為完美的防禦工事與物資調度，在風暴中屹立不搖。災後，所有精靈都帶著敬畏之心前來投靠，你以無可爭議的實力與智慧，成為了森靈谷新時代的最高統帥。",
+                    tags: ["#精算風險", "#先發制人", "#競爭導向"],
+                    collab: [
+                        { icon: 'D', t: "與「行動派勇士(橘寶)」合作", c: "利用他的創意來製造突破性的「秘密武器」，為你嚴謹的架構注入令人驚豔的火花，但記得要適時拉住他。" },
+                        { icon: 'C', t: "與「整合大師(小白)」合作", c: "冰冷的策略需要溫暖的溝通，讓大師先去探聽虛實、安撫人心，能大幅降低你的出擊與談判成本。" }
+                    ]
+                },
+                'B': { 
+                    roleName: "🛠️ 營運智囊", ipName: "綠豆 Eco", color: "#15803d", bg: "#f0fdf4", 
+                    monster: '<div class="m-green"><div class="mg-soil"></div><div class="mg-stem"></div><div class="mg-leaf-l"></div><div class="mg-leaf-r"></div><div class="mg-eyes"><div class="mg-eye"></div><div class="mg-eye"></div></div></div>',
+                    traitsP1: "你深信「想法再好，做不出來都是零」。你對細節敏銳，擅長運用工具、優化流程，用最快的速度打造出完美的實體。你不愛紙上談兵，更喜歡捲起袖子動手實作（Hands-on）。",
+                    traitsP2: "💡 職場超能力：你擁有令人安心的可靠性與極致的執行力。在充滿變數的創新團隊中，你是將虛幻的「概念」化為能穩定運作的「具體服務」的最強後盾。",
+                    celebName: "張忠謀 (Morris Chang)",
+                    celebDesc: "半導體教父、護國神山的創造者！他深信「卓越製造」的威力，憑藉極致的營運紀律與穩定不妥協的執行力，打造出別人無法跨越的百年基業。",
+                    story: "你的聚落一開始或許不是最華麗、最引人注目的，但絕對是地基打得最深、運作最有效率的。你日復一日地打磨每一個齒輪，將所有繁瑣的魔法流程自動化、優化到極致。<br><br>隨著歲月流逝，那些曾經光鮮亮麗的華麗聚落因為系統崩潰而沒落，但你的領地卻因為極致的穩定與卓越的品質，吸引了全森林的商團進駐。最終，你的聚落成為了森靈谷最繁榮、永不休止的心臟地帶，你用行動證明了：極致的執行力，本身就是一種無法被超越的魔法。",
+                    tags: ["#務實穩健", "#精準落地", "#效率至上"],
+                    collab: [
+                        { icon: 'A', t: "與「策略派軍師(布魯)」合作", c: "向軍師要求明確的戰略目標與 KPI，只要方向與指標清晰，你就能把這套流程優化到無人能及的境界。" },
+                        { icon: 'C', t: "與「整合大師(小白)」合作", c: "讓大師幫你處理所有繁瑣的對外溝通與公關危機，讓你能毫無後顧之憂地專注在內部系統的完美運轉。" }
+                    ]
+                },
+                'C': { 
+                    roleName: "🤝 整合大師", ipName: "小白 Uni", color: "#475569", bg: "#f8fafc", 
+                    monster: '<div class="m-white"><div class="m-white-face"><div class="mw-eye"></div><div class="mw-eye"></div></div></div>',
+                    traitsP1: "你具備極強的同理心與大局觀，不僅關注眼前的利益，更在乎長遠的共好價值。你擅長跨界溝通與資源整合，能輕易卸下他人的防備，將不同背景與專業的人緊緊凝聚在一起。",
+                    traitsP2: "💡 職場超能力：你是團隊中最不可或缺的潤滑劑與生態系推手。你不需要打敗對手，因為你有本事把對手都變成盟友，創造出 1+1 大於 3 的驚人綜效。",
+                    celebName: "黃仁勳 (Jensen Huang)",
+                    celebDesc: "掀起全球 AI 狂潮的生態系推手！以極強的親和力與「共好」精神，串聯上下游無數合作夥伴，貫徹「大家一起贏」的整合哲學。",
+                    story: "你走過的每條路徑，都開滿了友誼與信任的花朵。當其他精靈領袖都在為了爭奪領地與資源而互相提防、甚至開戰時，你卻背著行囊，穿梭在各個敵對的陣營之間。<br><br>你用真誠的傾聽與驚人的談判手腕，化解了長達百年的族群仇恨，成功串聯起各具專長的部落。最終，你並沒有建立單一的王國，而是打造了一個包容所有族群的「森靈大聯盟」。創源之樹為你的偉大願景降下祝福，你創造的不是一個國度，而是一個永遠和平、共生共榮的黃金時代！",
+                    tags: ["#跨界聯盟", "#和諧共贏", "#資源整合"],
+                    collab: [
+                        { icon: 'D', t: "與「行動派勇士(橘寶)」合作", c: "幫勇士那些超前時代的發明尋找「接地氣」的試用場景。你的廣大人脈能讓他的新技術迅速被大眾接受並找到買家。" },
+                        { icon: 'B', t: "與「營運智囊(綠豆)」合作", c: "在帶回大量新夥伴與新資源前，你需要推手的嚴謹規劃，確保聚落的基礎建設能夠承載這麼龐大的生態系擴張。" }
+                    ]
+                }
+            };
+
+            const res = dataMap[type];
+            document.getElementById('result-role').innerText = res.roleName;
+            document.getElementById('result-name').innerText = res.ipName;
+            
+            document.getElementById('result-name').style.color = res.color;
+            document.getElementById('result-theme-bg').style.backgroundColor = res.bg;
+            document.getElementById('celeb-icon-bg').style.backgroundColor = res.color;
+            
+            document.getElementById('result-monster-icon').innerHTML = `<div class="result-monster-active">${res.monster}</div>`;
+            
+            document.getElementById('trait-title').style.borderColor = res.color;
+            document.getElementById('celeb-title').style.borderColor = res.color;
+            document.getElementById('story-title').style.borderColor = res.color;
+
+            document.getElementById('result-traits-p1').innerText = res.traitsP1;
+            document.getElementById('result-traits-p2').innerText = res.traitsP2;
+            document.getElementById('result-traits-p2').style.color = res.color;
+            
+            document.getElementById('result-celeb-name').innerText = res.celebName;
+            document.getElementById('result-celeb-name').style.color = res.color;
+            document.getElementById('result-celeb-desc').innerText = res.celebDesc;
+            
+            document.getElementById('result-story').innerHTML = res.story;
+            
+            document.getElementById('result-tags').innerHTML = res.tags.map(t => `<span class="bg-white px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border shadow-sm" style="color:${res.color}; border-color:${res.color}40">${t}</span>`).join('');
+            
+            document.getElementById('result-collab').innerHTML = res.collab.map(item => `
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border-l-[6px] shadow-sm hover:shadow-md transition flex flex-col gap-2" style="border-color:${res.color}">
+                    <div class="flex items-center gap-3">
+                        ${miniAvatars[item.icon]}
+                        <div class="font-black text-sm sm:text-base" style="color:${res.color}">${item.t}</div>
+                    </div>
+                    <div class="text-slate-600 text-xs sm:text-sm leading-relaxed mt-1">${item.c}</div>
+                </div>
+            `).join('');
+
+            if(radarChartInstance) radarChartInstance.destroy();
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            const gradient = ctx.createRadialGradient(180, 180, 0, 180, 180, 180);
+            gradient.addColorStop(0, res.color + '66');
+            gradient.addColorStop(1, res.color + '11');
+
+            const dynamicLabels = [
+                `創新性 (${dim.innov})`,
+                `先動性 (${dim.proac})`,
+                `風險承擔 (${dim.risk})`,
+                `自主性 (${dim.auto})`,
+                `競爭積極 (${dim.comp})`
+            ];
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: dynamicLabels,
+                    datasets: [{
+                        data: [dim.innov, dim.proac, dim.risk, dim.auto, dim.comp],
+                        backgroundColor: gradient, 
+                        borderColor: res.color, 
+                        borderWidth: 3,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: res.color,
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    layout: { padding: { top: 25, bottom: 25, left: 25, right: 25 } },
+                    scales: { 
+                        r: { 
+                            min: 0, max: 10,
+                            ticks: { display: false, stepSize: 2 },
+                            grid: { color: 'rgba(0,0,0,0.08)', circular: true, lineWidth: 1.5 },
+                            angleLines: { color: 'rgba(0,0,0,0.08)', lineWidth: 1.5 },
+                            pointLabels: { 
+                                font: { family: 'Noto Sans TC', size: window.innerWidth < 640 ? 11 : 13, weight: 'bold' }, 
+                                color: '#475569', 
+                                padding: 15
+                            }
+                        } 
+                    },
+                    plugins: { legend: { display: false } },
+                    maintainAspectRatio: false,
+                    animation: { duration: 1500, easing: 'easeOutQuart' }
+                }
+            });
+        }
+
+        function downloadResult() {
+            const area = document.getElementById('result-capture-area');
+            const btn = document.querySelector('button[onclick="downloadResult()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 圖片生成中...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                html2canvas(area, { 
+                    scale: window.innerWidth < 640 ? 1.5 : 2,
+                    useCORS: true,
+                    backgroundColor: '#f0fdf4',
+                    windowWidth: 1200 
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = '森靈谷創業結果報告.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }).catch(err => {
+                    console.error("截圖失敗:", err);
+                    alert("圖片生成失敗，請稍後再試！");
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            }, 500);
+        }
+    </script>
+</body>
+</html>
